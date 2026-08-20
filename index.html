@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gamecock Tailgate — Playlist Sign-Up</title>
+<style>
+  :root {
+    --black: #0b0a0d;
+    --black-2: #17151a;
+    --black-3: #221f26;
+    --garnet: #7a0019;
+    --garnet-deep: #430010;
+    --garnet-bright: #a3122e;
+    --gold: #f0b429;
+    --gold-dim: #b8860b;
+    --bone: #f3ede2;
+    --ink: #241a17;
+    --ink-soft: #6e5f56;
+    --muted: #a89c8f;
+    --font-display: "Arial Black", "Helvetica Neue", Arial, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "Roboto Mono", Menlo, Consolas, monospace;
+    --font-body: -apple-system, "Segoe UI", system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--black); }
+
+  .page {
+    font-family: var(--font-body);
+    background: var(--black);
+    color: var(--bone);
+  }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    min-height: 62vh;
+    display: flex;
+    align-items: flex-end;
+    background: linear-gradient(160deg, var(--garnet-deep) 0%, var(--black) 65%);
+    overflow: hidden;
+  }
+  .hero-photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 60%;
+  }
+  .hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(0deg, var(--black) 0%, rgba(11,10,13,0.78) 30%, rgba(11,10,13,0.15) 60%, rgba(74,0,20,0.35) 100%);
+  }
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 30vh 22px 34px;
+  }
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    background: rgba(0,0,0,0.35);
+    border: 1px solid rgba(240,180,41,0.35);
+    padding: 5px 10px;
+    border-radius: 999px;
+    margin-bottom: 14px;
+  }
+  .hero-eyebrow .bird {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+    box-shadow: 0 0 6px 1px rgba(240,180,41,0.8);
+  }
+  .hero h1 {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    font-weight: 900;
+    font-size: clamp(32px, 8vw, 48px);
+    line-height: 1.02;
+    letter-spacing: 0.005em;
+    margin: 0 0 10px;
+    text-wrap: balance;
+    color: var(--bone);
+  }
+  .hero h1 span {
+    color: var(--gold);
+  }
+  .hero p {
+    font-size: 15px;
+    line-height: 1.55;
+    color: #d9cec2;
+    margin: 0;
+    max-width: 46ch;
+  }
+
+  /* ---------- Form section ---------- */
+  .field-wrap {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 0 22px 64px;
+  }
+
+  .card {
+    background: var(--black-2);
+    border: 1px solid var(--black-3);
+    border-radius: 4px;
+    margin-top: -18px;
+    position: relative;
+    z-index: 2;
+    overflow: hidden;
+    box-shadow: 0 30px 60px -30px rgba(0,0,0,0.8);
+  }
+
+  .card-header {
+    background: linear-gradient(90deg, var(--garnet), var(--garnet-deep));
+    padding: 14px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 3px solid var(--gold);
+  }
+  .card-header .title {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    font-weight: 900;
+    font-size: 15px;
+    letter-spacing: 0.04em;
+    color: var(--bone);
+  }
+  .card-header .code {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: rgba(243,237,226,0.75);
+    text-transform: uppercase;
+  }
+
+  form { display: flex; flex-direction: column; gap: 20px; padding: 26px 24px 28px; }
+
+  .field label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 7px;
+  }
+  .field label .opt {
+    text-transform: none;
+    letter-spacing: 0;
+    font-family: var(--font-body);
+    color: #7d7168;
+    font-weight: 400;
+  }
+  .field label .req { color: var(--gold); }
+
+  .field input,
+  .field textarea {
+    width: 100%;
+    font-family: var(--font-body);
+    font-size: 16px;
+    color: var(--bone);
+    background: var(--black-3);
+    border: none;
+    border-bottom: 2px solid #3a3540;
+    border-radius: 3px 3px 0 0;
+    padding: 10px 10px;
+    outline: none;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .field input::placeholder,
+  .field textarea::placeholder { color: #6b6470; }
+
+  .field input:focus,
+  .field textarea:focus {
+    border-bottom-color: var(--gold);
+    background: #2a262f;
+  }
+
+  .field textarea {
+    resize: vertical;
+    min-height: 64px;
+    line-height: 1.5;
+    font-size: 15px;
+  }
+
+  .row-two {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  @media (max-width: 420px) {
+    .row-two { grid-template-columns: 1fr; }
+  }
+
+  button[type="submit"] {
+    margin-top: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-family: var(--font-display);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 15px;
+    color: var(--bone);
+    background: linear-gradient(180deg, var(--garnet-bright), var(--garnet-deep));
+    border: 1px solid rgba(240,180,41,0.5);
+    border-radius: 4px;
+    padding: 15px 22px;
+    cursor: pointer;
+    box-shadow: 0 10px 24px -12px rgba(122,0,25,0.8), inset 0 1px 0 rgba(255,255,255,0.12);
+    transition: transform 0.1s ease, box-shadow 0.1s ease, opacity 0.15s ease;
+  }
+  button[type="submit"]:hover { transform: translateY(-1px); }
+  button[type="submit"]:active { transform: translateY(0); }
+  button[type="submit"]:disabled {
+    opacity: 0.6;
+    cursor: default;
+    transform: none;
+  }
+  button[type="submit"] .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--gold);
+    flex-shrink: 0;
+  }
+
+  .hint {
+    font-size: 12px;
+    color: #857a70;
+    text-align: center;
+    margin: -6px 0 0;
+  }
+
+  /* ---------- success state ---------- */
+  .success {
+    display: none;
+    text-align: center;
+    padding: 34px 24px 32px;
+  }
+  .success.show { display: block; }
+  .success .stamp {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1.5px solid var(--gold);
+    border-radius: 4px;
+    padding: 4px 10px;
+    transform: rotate(-2deg);
+    margin-bottom: 16px;
+  }
+  .success h2 {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    font-size: 21px;
+    margin: 0 0 8px;
+    color: var(--bone);
+  }
+  .success p {
+    font-size: 14px;
+    color: var(--muted);
+    margin: 0 0 20px;
+  }
+  .tracklist {
+    text-align: left;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--black-3);
+    border-radius: 6px;
+    padding: 14px 16px;
+    margin: 0 0 22px;
+    font-size: 13px;
+  }
+  .tracklist h3 {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 8px;
+  }
+  .tracklist ol {
+    margin: 0;
+    padding-left: 18px;
+    color: var(--bone);
+    line-height: 1.7;
+  }
+  .tracklist ol li span { color: var(--muted); }
+
+  .add-another {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gold);
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    padding: 6px;
+  }
+
+  form.hidden { display: none; }
+
+  .foot {
+    text-align: center;
+    padding: 22px 22px 40px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #5c554e;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    button[type="submit"] { transition: none; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hero">
+    <img class="hero-photo" src="tailgate.jpg" alt="Williams-Brice Stadium at night, seen from a tailgate deck strung with lights">
+    <div class="hero-content">
+      <span class="hero-eyebrow"><span class="bird"></span>Williams&#8209;Brice Stadium &middot; Gameday</span>
+      <h1>Gamecock <span>Tailgate</span> Playlist</h1>
+      <p>Help set the soundtrack before kickoff &mdash; drop in a song you want blasting off the deck.</p>
+    </div>
+  </div>
+
+  <div class="field-wrap">
+    <div class="card">
+      <div class="card-header">
+        <span class="title">Lineup Card</span>
+        <span class="code">Garnet &amp; Black</span>
+      </div>
+
+      <form id="tailgateForm"
+            action="https://docs.google.com/forms/d/e/1FAIpQLSd6rxvBj0NHiAvQoxkYsa6mG-P_21Dt_moPJtXvioY7-cq7Jw/formResponse"
+            method="POST"
+            target="hidden_iframe">
+
+        <div class="row-two">
+          <div class="field">
+            <label for="song">Song Title <span class="req">*</span></label>
+            <input id="song" name="entry.2028553757" type="text" placeholder="e.g. Sandstorm" required maxlength="150" autocomplete="off">
+          </div>
+          <div class="field">
+            <label for="artist">Artist <span class="req">*</span></label>
+            <input id="artist" name="entry.1527130244" type="text" placeholder="e.g. Darude" required maxlength="150" autocomplete="off">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="name">Your Name <span class="req">*</span></label>
+          <input id="name" name="entry.1073972742" type="text" placeholder="So we know who requested it" required maxlength="120" autocomplete="off">
+        </div>
+
+        <div class="field">
+          <label for="note">Why this song? <span class="opt">(optional)</span></label>
+          <textarea id="note" name="entry.1503842935" placeholder="A memory, a hype anthem, a reason it has to play before kickoff..." maxlength="500"></textarea>
+        </div>
+
+        <button type="submit" id="submitBtn"><span class="dot"></span>Add To The Lineup</button>
+        <p class="hint">Submissions go straight into the tailgate playlist &mdash; add as many as you like.</p>
+      </form>
+
+      <div class="success" id="successBlock">
+        <div class="stamp">Locked In</div>
+        <h2>Track added to the lineup</h2>
+        <p>Thanks for the request &mdash; it's in the mix.</p>
+        <div class="tracklist" id="tracklist" style="display:none;">
+          <h3>Your requests this visit</h3>
+          <ol id="tracklistItems"></ol>
+        </div>
+        <button type="button" class="add-another" id="addAnother">+ Add another song</button>
+      </div>
+    </div>
+
+    <div class="foot">University of South Carolina &middot; Gamecock Tailgate</div>
+  </div>
+
+</div>
+
+<iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" title="submission target"></iframe>
+
+<script>
+  (function () {
+    var form = document.getElementById('tailgateForm');
+    var iframe = document.getElementById('hidden_iframe');
+    var submitBtn = document.getElementById('submitBtn');
+    var successBlock = document.getElementById('successBlock');
+    var tracklist = document.getElementById('tracklist');
+    var tracklistItems = document.getElementById('tracklistItems');
+    var addAnotherBtn = document.getElementById('addAnother');
+
+    var submitting = false;
+    var songs = [];
+
+    form.addEventListener('submit', function () {
+      if (!form.reportValidity || form.reportValidity()) {
+        submitting = true;
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Recording...';
+      }
+    });
+
+    iframe.addEventListener('load', function () {
+      if (!submitting) return;
+      submitting = false;
+
+      var songTitle = document.getElementById('song').value.trim();
+      var artist = document.getElementById('artist').value.trim();
+      if (songTitle || artist) {
+        songs.push({ song: songTitle, artist: artist });
+      }
+
+      form.classList.add('hidden');
+      successBlock.classList.add('show');
+
+      if (songs.length) {
+        tracklist.style.display = 'block';
+        tracklistItems.innerHTML = songs.map(function (s) {
+          return '<li>' + escapeHtml(s.song) + ' <span>&mdash; ' + escapeHtml(s.artist) + '</span></li>';
+        }).join('');
+      }
+
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<span class="dot"></span>Add To The Lineup';
+    });
+
+    addAnotherBtn.addEventListener('click', function () {
+      form.reset();
+      form.classList.remove('hidden');
+      successBlock.classList.remove('show');
+      document.getElementById('song').focus();
+    });
+
+    function escapeHtml(str) {
+      var div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+  })();
+</script>
+</body>
+</html>
